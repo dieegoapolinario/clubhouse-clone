@@ -4,8 +4,8 @@ export default class SocketBuilder{
   constructor({ socketUrl, namespace }){
     this.socketUrl = `${socketUrl}/${namespace}`
     
-    this.onUserConnected = () => {}
-    this.onUserDisconnected = () => {}
+    this.onUserConnected = () => { }
+    this.onUserDisconnected = () => { }
   }
 
   setOnUserConnected(fn){
