@@ -49,5 +49,6 @@ export default class View {
     }
 
     baseElement.innerHTML += htmlTemplate
+
   }
 }

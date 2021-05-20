@@ -14,5 +14,5 @@ export default function getTemplate(attendee = new Attendee()) {
         ${attendee.firstName}
       </p>
     </div>
-    `;
+  `;
 }

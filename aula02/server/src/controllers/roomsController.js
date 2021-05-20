@@ -4,7 +4,7 @@ import { constants } from "../util/constants.js"
 
 export default class RoomsController {
   #users = new Map()
-
+  
   constructor() {
     this.rooms = new Map()
   }
@@ -38,7 +38,7 @@ export default class RoomsController {
     // removemos o usuario da sala
     room.users.delete(toBeRemoved)
 
-    // se não tiver mais nenhum usuario na sala, removemos a sala
+    // se não tiver mais nenhum usuario na sala, matamos a sala
     if(!room.users.size) {
       this.rooms.delete(roomId)
       return;
@@ -82,6 +82,7 @@ export default class RoomsController {
     this.#notifyUserProfileUpgrade(socket, room.id, newOwner)
 
     return newOwner
+
   }
 
   joinRoom(socket, { user, room }) {
@@ -98,7 +99,7 @@ export default class RoomsController {
     this.#notifyUsersOnRoom(socket, roomId, updatedUserData)
     this.#replyWithActiveUsers(socket, updatedRoom.users)
   }
-
+    
   #replyWithActiveUsers(socket, users) {
     const event = constants.event.LOBBY_UPDATED
     socket.emit(event, [...users.values()])
@@ -150,23 +151,22 @@ export default class RoomsController {
 
     return mappedRoom
   }
-
+    
   #updateGlobalUserData(userId, userData = {}, roomId = '') {
     const user = this.#users.get(userId) ?? {}
     const existingRoom = this.rooms.has(roomId)
 
     const updatedUserData = new Attendee({
-        ...user,
-        ...userData,
-        roomId,
-        // se for o unico na sala
-        isSpeaker: !existingRoom,
+      ...user,
+      ...userData,
+      roomId,
+      // se for o unico na sala
+      isSpeaker: !existingRoom,
     })
 
     this.#users.set(userId, updatedUserData)
 
     return this.#users.get(userId)
-
   }
 
   getEvents() {

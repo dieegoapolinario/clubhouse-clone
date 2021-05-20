@@ -5,10 +5,10 @@ export default class RoomController {
   constructor({ roomInfo, socketBuilder, view }) {
     this.socketBuilder = socketBuilder
     this.roomInfo = roomInfo
-    this.view = view    
+    this.view = view   
     this.socket = {}
   }
-  
+    
   static async initialize(deps) {
     return new RoomController(deps)._initialize()
   }
@@ -38,7 +38,7 @@ export default class RoomController {
       const attendee = new Attendee(data)
       console.log('onUserProfileUgrade', attendee)
       if(attendee.isSpeaker) {
-        this.view.addAttendeeOnGrid(attendee, true)
+          this.view.addAttendeeOnGrid(attendee, true)
       }
     }
   }

@@ -1,12 +1,5 @@
 export default class Attendee {
-  constructor({ 
-    id, 
-    username, 
-    img, 
-    isSpeaker, 
-    roomId, 
-    peerId 
-  }) {
+  constructor({ id, username, img, isSpeaker, roomId, peerId }) {
     this.id = id
     this.img = img || ""
     this.isSpeaker = isSpeaker
