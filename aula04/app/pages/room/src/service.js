@@ -5,6 +5,7 @@ export default class RoomService {
     this.currentPeer = {}
     this.currentUser = {}
     this.currentStream = {}
+    this.isAudioActive = true
     this.peers = new Map()
   }
 
@@ -23,14 +24,49 @@ export default class RoomService {
     return this.currentUser
   }
 
-  upgradeUserPermission(user) {
+  async toggleAudioActivation() {
+    this.isAudioActive = !this.isAudioActive
+    this.switchAudioStreamSource({ realAudio: this.isAudioActive })
+  }
+
+  async upgradeUserPermission(user) {
     if (!user.isSpeaker) return;
-    
+
     const isCurrentUser = user.id === this.currentUser.id
     
     if (!isCurrentUser) return;
-    
+
     this.currentUser = user
+
+    return this._reconnectAsSpeaker()
+  }
+
+  async _reconnectAsSpeaker() {
+    return this.switchAudioStreamSource({ realAudio: true })
+  }
+
+  _reconnectPeers(stream) {
+    for (const peer of this.peers.values()) {
+      const peerId = peer.call.peer
+      peer.call.close()
+      console.log('calling', peerId)
+      this.currentPeer.call(peerId, stream)
+    }
+  }
+
+  async switchAudioStreamSource({ realAudio }) {
+    const userAudio = realAudio
+      ? await this.media.getUserAudio()
+      : this.media.createMediaStreamFake()
+
+    this.currentStream = new UserStream({
+      isFake: realAudio,
+      stream: userAudio
+    })
+
+    this.currentUser.isSpeaker = realAudio
+    // precisa encerrar as chamadas para ligar novamente
+    this._reconnectPeers(this.currentStream.stream)
   }
 
   updateCurrentUserProfile(users) {
@@ -39,9 +75,10 @@ export default class RoomService {
 
   async getCurrentStream() {
     const { isSpeaker } = this.currentUser
-    if(isSpeaker) {
+    if (isSpeaker) {
       return this.currentStream.stream
     }
+
     return this.media.createMediaStreamFake()
   }
 
@@ -53,17 +90,17 @@ export default class RoomService {
   }
 
   disconnectPeer({ peerId }) {
-    if(!this.peers.has(peerId)) return;
+    if (!this.peers.has(peerId)) return;
 
     this.peers.get(peerId).call.close()
     this.peers.delete(peerId);
   }
-
+    
   async callNewUser(user) {
     // se o usuario que entrou for speaker, ele vai me ligar!
     const { isSpeaker } = this.currentUser
-        
-    if(!isSpeaker) return;
+
+    if (!isSpeaker) return;
 
     const stream = await this.getCurrentStream()
     this.currentPeer.call(user.peerId, stream)

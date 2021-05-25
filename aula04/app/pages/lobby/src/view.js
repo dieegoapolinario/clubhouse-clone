@@ -6,11 +6,13 @@ const roomGrid = document.getElementById('roomGrid')
 const btnCreateRoomWithTopic = document.getElementById('btnCreateRoomWithTopic')
 const btnCreateRoomWithoutTopic = document.getElementById('btnCreateRoomWithoutTopic')
 const txtTopic = document.getElementById('txtTopic')
+const imgUser = document.getElementById('imgUser')
 
 export default class View {
   static clearRoomList() {
     roomGrid.innerHTML = ''
   }
+  
   static generateRoomLink({ id, topic }) {
     return `./../room/index.html?id=${id}&topic=${topic}`
   }
@@ -30,7 +32,7 @@ export default class View {
     })
     btnCreateRoomWithTopic.addEventListener('click', () => {
       const topic = txtTopic.value
-      View.redirectToRoom(topic)          
+      View.redirectToRoom(topic)            
     })
   }
     
