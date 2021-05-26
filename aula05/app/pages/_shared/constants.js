@@ -1,5 +1,6 @@
 export const constants = {
   socketUrl: 'http://localhost:3000',
+  //socketUrl: 'https://ew-socket-server-version.herokuapp.com/',
   socketNamespaces: {
     room: 'room',
     lobby: 'lobby'
@@ -27,7 +28,6 @@ export const constants = {
     SPEAK_REQUEST: 'speakRequest',
     SPEAK_ANSWER: 'speakAnswer'
   },
-  
   firebaseConfig: {
     apiKey: "AIzaSyBlOf-lXRclE2LJf5avFWXKSF022kV2cy4",
     authDomain: "clubhouse-clone-f6be7.firebaseapp.com",

@@ -1,4 +1,4 @@
-import { constants } from "../../_shared/constants.js"
+import { constants } from "../../_shared/constants.js";
 import UserDb from "../../_shared/userDb.js";
 
 function redirectToLobby() {
@@ -27,10 +27,10 @@ function onLogin({ provider, firebase }) {
   }
 }
  
-/*const currentUser = UserDb.get()
+const currentUser = UserDb.get()
 if(Object.keys(currentUser).length) {
   redirectToLobby()
-}*/
+}
 
 const { firebaseConfig } = constants
 // Initialize Firebase
